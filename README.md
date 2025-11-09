@@ -1,0 +1,1 @@
+The project is about the reverse engineering of the Mellita Solo Perfect Milk coffee machine.
