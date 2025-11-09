@@ -1,5 +1,7 @@
 The project is about the reverse engineering of the Mellita Solo Perfect Milk coffee machine.
 
+[Schematics](schematics)
+
 EF693 Main
 
 MCU is ATmega324PA (TQFP)
