@@ -1,0 +1,6 @@
+[submodule "firmware/controller/libs/cmsis-device-f1"]
+	path = firmware/controller/libs/cmsis-device-f1
+	url = https://github.com/STMicroelectronics/cmsis-device-f1.git
+[submodule "firmware/controller/libs/cmsis-core"]
+	path = firmware/controller/libs/cmsis-core
+	url = https://github.com/STMicroelectronics/cmsis-core

@@ -24,16 +24,16 @@ set(CMAKE_CXX_FLAGS "${STM32_FLAGS} -O2")
 set(CMAKE_ASM_FLAGS "-march=armv7-m -mcpu=cortex-m3 -mthumb -mlittle-endian")
 
 
-include_directories(CMSIS/Include)
-include_directories(CMSIS/Device/ST/STM32F1xx/Include)
+include_directories(libs/cmsis-core/Include)
+include_directories(libs/cmsis-device-f1/Include)
 
-set(CMAKE_EXE_LINKER_FLAGS "${STM32_FLAGS} -T${PROJECT_SOURCE_DIR}/sys/STM32F103XB_FLASH.ld")
+set(CMAKE_EXE_LINKER_FLAGS "${STM32_FLAGS} -T${PROJECT_SOURCE_DIR}/init/STM32F103XB_FLASH.ld")
 
 add_executable(${TARGET}
     main.c
     syscalls.c
-    sys/startup_stm32f103xb.s
-    CMSIS/Device/ST/STM32F1xx/Source/system_stm32f1xx.c
+    init/startup_stm32f103xb.s
+    init/system_stm32f1xx.c
 )
 
 add_custom_command(
