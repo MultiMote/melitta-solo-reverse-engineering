@@ -20,10 +20,10 @@ int main(void)
 
     GPIOC->CRH &= ~GPIO_CRH_CNF13_Msk;
     GPIOC->CRH |= (GPIO_CRH_MODE13_0);
-    
+
     while (1)
     {
         GPIOC->ODR ^= GPIO_ODR_ODR13;
-        delay_ms(500);
+        delay_ms(1000);
     }
 }

@@ -1,10 +1,13 @@
 cmake_minimum_required(VERSION 4.1)
 
 project(melitta)
+enable_language(ASM)
+
+find_program(OPENOCD openocd)
+
 
 set(TARGET ${PROJECT_NAME}.elf)
 
-enable_language(ASM)
 
 SET(STM32_FLAGS "
     -DSTM32F103xB \
@@ -22,18 +25,20 @@ SET(STM32_FLAGS "
 set(CMAKE_C_FLAGS "${STM32_FLAGS} -O2")
 set(CMAKE_CXX_FLAGS "${STM32_FLAGS} -O2")
 set(CMAKE_ASM_FLAGS "-march=armv7-m -mcpu=cortex-m3 -mthumb -mlittle-endian")
-
-
-include_directories(libs/cmsis-core/Include)
-include_directories(libs/cmsis-device-f1/Include)
-
 set(CMAKE_EXE_LINKER_FLAGS "${STM32_FLAGS} -T${PROJECT_SOURCE_DIR}/init/STM32F103XB_FLASH.ld")
+
+set(OTHER_SOURCES
+    init/startup_stm32f103xb.s
+    init/system_stm32f1xx.c
+)
+
+include(libs/libs.cmake)
+include_directories(inc)
 
 add_executable(${TARGET}
     main.c
     syscalls.c
-    init/startup_stm32f103xb.s
-    init/system_stm32f1xx.c
+    ${OTHER_SOURCES}
 )
 
 add_custom_command(
@@ -49,3 +54,12 @@ add_custom_command(
     COMMAND ${CMAKE_SIZE} --format=berkeley ${TARGET}
     WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 )
+
+
+if (OPENOCD)
+  add_custom_target(flash-openocd
+    COMMAND ${OPENOCD} -d0 -f interface/stlink.cfg -f target/stm32f1x.cfg -c "program ${TARGET} verify reset exit"
+    DEPENDS ${TARGET}
+    WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+  )
+endif()

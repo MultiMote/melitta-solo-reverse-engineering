@@ -4,3 +4,6 @@
 [submodule "firmware/controller/libs/cmsis-core"]
 	path = firmware/controller/libs/cmsis-core
 	url = https://github.com/STMicroelectronics/cmsis-core
+[submodule "firmware/controller/libs/stm32f1xx-hal-driver"]
+	path = firmware/controller/libs/stm32f1xx-hal-driver
+	url = https://github.com/STMicroelectronics/stm32f1xx-hal-driver.git
