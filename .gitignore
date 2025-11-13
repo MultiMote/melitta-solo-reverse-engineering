@@ -1,2 +1,2 @@
 *.dch~
-/src/build
+.vscode
