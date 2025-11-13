@@ -11,6 +11,7 @@ set(TARGET ${PROJECT_NAME}.elf)
 
 SET(STM32_FLAGS "
     -DSTM32F103xB \
+    -DUSE_FULL_LL_DRIVER \
     -march=armv7-m \
     -mcpu=cortex-m3 \
     -mthumb \
@@ -33,7 +34,6 @@ set(OTHER_SOURCES
 )
 
 include(libs/libs.cmake)
-include_directories(inc)
 
 add_executable(${TARGET}
     main.c

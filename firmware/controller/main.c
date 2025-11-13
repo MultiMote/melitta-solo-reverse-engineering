@@ -1,29 +1,36 @@
 #include "stm32f1xx.h"
+#include "stm32f1xx_ll_bus.h"
+#include "stm32f1xx_ll_gpio.h"
+#include "stm32f1xx_ll_utils.h"
 
-void delay_ms(uint16_t ms)
+void GPIO_Config(void)
 {
-    TIM2->PSC = 8000 - 1; // 8 000 000 Hz / 8 000 = 1 000 Hz (1 ms)
-    TIM2->ARR = ms - 1;   // desired delay
-    TIM2->CR1 |= TIM_CR1_CEN;
-    while (!(TIM2->SR & TIM_SR_UIF))
-    {
-    }                          // wait UIF to be set
-    TIM2->SR &= ~TIM_SR_UIF;   // reset UIF
-    TIM2->CR1 &= ~TIM_CR1_CEN; // Disable the timer
+    LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_GPIOC);
+
+    LL_GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitStruct.Pin = LL_GPIO_PIN_13;
+    GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
+    GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
+    GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
+    LL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 }
+
+void SystemClock_Config(void)
+{
+    LL_Init1msTick(8000000);
+    LL_SetSystemCoreClock(8000000);
+}
+
 
 int main(void)
 {
-
-    RCC->APB2ENR |= RCC_APB2ENR_IOPCEN;
-    RCC->APB1ENR|=RCC_APB1ENR_TIM2EN;
-
-    GPIOC->CRH &= ~GPIO_CRH_CNF13_Msk;
-    GPIOC->CRH |= (GPIO_CRH_MODE13_0);
+    SystemClock_Config();
+    GPIO_Config();
 
     while (1)
     {
-        GPIOC->ODR ^= GPIO_ODR_ODR13;
-        delay_ms(1000);
+        LL_GPIO_TogglePin(GPIOC, LL_GPIO_PIN_13);
+        LL_mDelay(500);
     }
 }
+
