@@ -16,7 +16,7 @@ Wiring:
 
 MCU Pins:
 
-![mcu_pins](images/mcu_pins.jpg)
+![mcu_pins](images/mcu_pins.JPG)
 
 ## EF693 Disp
 
