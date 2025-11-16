@@ -2,7 +2,7 @@ The project is about the reverse engineering of the Mellita Solo Perfect Milk co
 
 [Schematics](schematics)
 
-EF693 Main
+## EF693 Main
 
 MCU is ATmega324PA (TQFP)
 
@@ -14,7 +14,11 @@ Wiring:
 
 ![ef693_main_wiring](images/ef693_main_wiring.jpg)
 
-EF693 Disp
+MCU Pins:
+
+![mcu_pins](images/mcu_pins.jpg)
+
+## EF693 Disp
 
 MCU is ATtiny48AU (TQFP)
 
