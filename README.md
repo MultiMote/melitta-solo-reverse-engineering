@@ -26,4 +26,9 @@ MCU is ATtiny48AU (TQFP)
 
 ![ef693_disp_bot](images/DSC03808.JPG)
 
+MCU Pins:
+
+![mcu_pins](images/mcu_pins_disp.JPG)
+
+
 Both of MCUs in my device are dead so I want try to make own controller.
