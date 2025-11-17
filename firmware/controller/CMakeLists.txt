@@ -41,6 +41,8 @@ add_executable(${TARGET}
     ${OTHER_SOURCES}
 )
 
+set_property(TARGET ${TARGET} PROPERTY C_STANDARD 11)
+
 add_custom_command(
     TARGET ${TARGET}
     POST_BUILD
