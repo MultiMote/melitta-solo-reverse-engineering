@@ -7,11 +7,22 @@ set(TARGET ${PROJECT_NAME}.elf)
 set(AVR_DEVICE atmega328p)
 set(AVR_FREQ 8000000)
 
+set(AVRDUDE_DEVICE m328p)
+set(AVRDUDE_FUSEBIT_FLAGS -U lfuse:w:0xE2:m -U hfuse:w:0xDE:m -U efuse:w:0xFD:m)
+
+if(NOT AVRDUDE_FLAGS)
+    # usbasp programmer
+    set(AVRDUDE_FLAGS -c usbasp -P usb -V)
+endif()
+
+
 # Force release build
 set(CMAKE_BUILD_TYPE "Release" CACHE STRING "" FORCE)
 set(AVR_FLAGS "
     -mmcu=${AVR_DEVICE} \
     -DF_CPU=${AVR_FREQ}UL \
+    -Wall \
+    -Werror \
     -ffunction-sections \
     -fdata-sections \
     -Wl,--gc-sections")
@@ -19,7 +30,7 @@ set(CMAKE_C_FLAGS  "${AVR_FLAGS}")
 set(CMAKE_CXX_FLAGS "${AVR_FLAGS}")
 
 add_executable(${TARGET}
-main.c
+    main.c
 )
 
 set_property(TARGET ${TARGET} PROPERTY C_STANDARD 11)
@@ -44,3 +55,22 @@ add_custom_command(
     COMMAND ${CMAKE_OBJCOPY} -O ihex -j .eeprom --set-section-flags=.eeprom="alloc,load" --change-section-lma .eeprom=0 ${TARGET} ${PROJECT_NAME}-EEPROM.hex
     WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 )
+
+
+find_program(AVRDUDE_EXECUTABLE avrdude)
+
+if (AVRDUDE_EXECUTABLE)
+    add_custom_target(
+        flash
+        COMMAND ${AVRDUDE_EXECUTABLE} -s -p ${AVRDUDE_DEVICE} ${AVRDUDE_FLAGS} -U "flash:w:${PROJECT_NAME}.hex:a"
+        DEPENDS ${TARGET}
+        WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+    )
+
+    add_custom_target(
+        flash-fusebits
+        COMMAND ${AVRDUDE_EXECUTABLE} -s -p ${AVRDUDE_DEVICE} ${AVRDUDE_FLAGS} ${AVRDUDE_FUSEBIT_FLAGS}
+        DEPENDS ${TARGET}
+        WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+    )
+endif()
