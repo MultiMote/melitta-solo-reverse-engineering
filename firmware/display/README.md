@@ -7,6 +7,18 @@ cmake -G Ninja -DTOOLCHAIN_BIN_DIR="path/to/compiler/bin/" -DCMAKE_TOOLCHAIN_FIL
 cmake --build .
 ```
 
+Flash (avrdude required)
+
+```
+cmake --build . --target flash
+```
+
+Flash fuse bits
+
+```
+cmake --build . --target flash-fusebits
+```
+
 Toolchain file example: [extra/avr8-gnu-toolchain.cmake](extra/avr8-gnu-toolchain.cmake)
 
 VSCode example (`.vscode/settings.json`):
@@ -20,3 +32,5 @@ VSCode example (`.vscode/settings.json`):
     "cmake.generator": "Ninja"
 }
 ```
+
+
