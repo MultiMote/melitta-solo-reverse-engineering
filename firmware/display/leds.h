@@ -1,6 +1,7 @@
 #ifndef LEDS_H_
 #define LEDS_H_
 
+#include <avr/io.h>
 #include "utils.h"
 
 #define LED1_PIN PD5
@@ -28,7 +29,7 @@ enum led_index
     LED_FROTH
 };
 
-inline void set_led_by_index(uint8_t index, uint8_t value)
+static inline void set_led_by_index(enum led_index index, uint8_t value)
 {
     switch (index)
     {
@@ -65,19 +66,19 @@ inline void set_led_by_index(uint8_t index, uint8_t value)
     }
 }
 
-inline void leds_init()
+static inline void leds_init()
 {
     DDRD |= _BV(LED1_PIN) | _BV(LED2_PIN) | _BV(LED3_PIN) | _BV(LED4_PIN) | _BV(LED9_PIN) | _BV(LED10_PIN);
     DDRC |= _BV(LED5_PIN) | _BV(LED6_PIN) | _BV(LED7_PIN) | _BV(LED8_PIN);
 }
 
-inline void leds_on_all()
+static inline void leds_on_all()
 {
     PORTD |= _BV(LED1_PIN) | _BV(LED2_PIN) | _BV(LED3_PIN) | _BV(LED4_PIN) | _BV(LED9_PIN) | _BV(LED10_PIN);
     PORTC |= _BV(LED5_PIN) | _BV(LED6_PIN) | _BV(LED7_PIN) | _BV(LED8_PIN);
 }
 
-inline void leds_off_all()
+static inline void leds_off_all()
 {
     PORTD &= ~(_BV(LED1_PIN) | _BV(LED2_PIN) | _BV(LED3_PIN) | _BV(LED4_PIN) | _BV(LED9_PIN) | _BV(LED10_PIN));
     PORTC &= ~(_BV(LED5_PIN) | _BV(LED6_PIN) | _BV(LED7_PIN) | _BV(LED8_PIN));

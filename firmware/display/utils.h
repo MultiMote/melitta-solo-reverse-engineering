@@ -25,4 +25,9 @@ inline void pin_set(volatile uint8_t *port, uint8_t pin_mask, uint8_t on)
     }
 }
 
+inline uint8_t pin_check(const volatile uint8_t *port, uint8_t pin_mask)
+{
+    return (*port & pin_mask) != 0;
+}
+
 #endif // UTILS_H_
