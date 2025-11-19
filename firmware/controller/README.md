@@ -3,7 +3,7 @@ Build
 ```
 mkdir build
 cd build
-cmake -G Ninja -DTOOLCHAIN_BIN_DIR="path/to/compiler/bin/" -DCMAKE_TOOLCHAIN_FILE="extra/arm-none-eabi-toolchain.cmake" ..
+cmake -G Ninja -DTOOLCHAIN_BIN_DIR="path/to/compiler/bin/" -DCMAKE_TOOLCHAIN_FILE="../extra/arm-none-eabi-toolchain.cmake" ..
 cmake --build .
 ```
 

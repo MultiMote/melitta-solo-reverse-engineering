@@ -3,7 +3,7 @@ Build
 ```
 mkdir build
 cd build
-cmake -G Ninja -DTOOLCHAIN_BIN_DIR="path/to/compiler/bin/" -DCMAKE_TOOLCHAIN_FILE="extra/avr8-gnu-toolchain.cmake" ..
+cmake -G Ninja -DTOOLCHAIN_BIN_DIR="path/to/compiler/bin/" -DCMAKE_TOOLCHAIN_FILE="../extra/avr8-gnu-toolchain.cmake" ..
 cmake --build .
 ```
 

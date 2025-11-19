@@ -49,14 +49,6 @@ add_custom_command(
     WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 )
 
-# Extract EEPRPOM HEX
-add_custom_command(
-    TARGET ${TARGET} POST_BUILD
-    COMMAND ${CMAKE_OBJCOPY} -O ihex -j .eeprom --set-section-flags=.eeprom="alloc,load" --change-section-lma .eeprom=0 ${TARGET} ${PROJECT_NAME}-EEPROM.hex
-    WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-)
-
-
 find_program(AVRDUDE_EXECUTABLE avrdude)
 
 if (AVRDUDE_EXECUTABLE)
