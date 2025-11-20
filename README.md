@@ -1,5 +1,7 @@
 The project is about the reverse engineering of the Mellita Solo Perfect Milk coffee machine.
 
+Both of MCUs in my device are dead so I want try to make own controller.
+
 [Schematics](schematics)
 
 ## EF693 Main
@@ -30,5 +32,6 @@ MCU Pins:
 
 ![mcu_pins](images/mcu_pins_disp.JPG)
 
+For this project, I have replaced the ATtiny48A with the ATmega328P, which is often used in Arduino boards. The pinout is mostly compatible, but one modification is necessary.
 
-Both of MCUs in my device are dead so I want try to make own controller.
+![ef693_disp_mod](images/ef693_disp_mod.jpg)
