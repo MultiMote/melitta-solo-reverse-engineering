@@ -1,67 +1,75 @@
 cmake_minimum_required(VERSION 4.1)
 
-project(melitta)
-enable_language(ASM)
-
-find_program(OPENOCD openocd)
-
+project(melitta-controller)
 
 set(TARGET ${PROJECT_NAME}.elf)
 
+set(AVR_DEVICE atmega324p)
+set(AVR_FREQ 8000000) # ?
 
-SET(STM32_FLAGS "
-    -DSTM32F103xB \
-    -DUSE_FULL_LL_DRIVER \
-    -march=armv7-m \
-    -mcpu=cortex-m3 \
-    -mthumb \
-    -mlittle-endian \
+set(AVRDUDE_DEVICE m324p)
+# set(AVRDUDE_FUSEBIT_FLAGS -U lfuse:w:0xE2:m -U hfuse:w:0xDE:m -U efuse:w:0xFD:m)
+
+if(NOT AVRDUDE_FLAGS)
+    # usbasp programmer
+    set(AVRDUDE_FLAGS -c usbasp -P usb -V)
+endif()
+
+
+# Force release build
+set(CMAKE_BUILD_TYPE "Release" CACHE STRING "" FORCE)
+set(AVR_FLAGS "
+    -mmcu=${AVR_DEVICE} \
+    -DF_CPU=${AVR_FREQ}UL \
+    -Wall \
+    -Werror \
     -ffunction-sections \
     -fdata-sections \
-    -mfloat-abi=soft \
-    -Wall -Werror \
-    -Wl,-Map=output.map -Wl,--gc-sections \
-    -lm -lc")
-
-set(CMAKE_C_FLAGS "${STM32_FLAGS} -O2")
-set(CMAKE_CXX_FLAGS "${STM32_FLAGS} -O2")
-set(CMAKE_ASM_FLAGS "-march=armv7-m -mcpu=cortex-m3 -mthumb -mlittle-endian")
-set(CMAKE_EXE_LINKER_FLAGS "${STM32_FLAGS} -T${PROJECT_SOURCE_DIR}/init/STM32F103XB_FLASH.ld")
-
-set(OTHER_SOURCES
-    init/startup_stm32f103xb.s
-    init/system_stm32f1xx.c
-)
-
-include(libs/libs.cmake)
+    -Wl,--gc-sections")
+set(CMAKE_C_FLAGS  "${AVR_FLAGS}")
+set(CMAKE_CXX_FLAGS "${AVR_FLAGS}")
 
 add_executable(${TARGET}
     main.c
-    syscalls.c
-    ${OTHER_SOURCES}
 )
 
 set_property(TARGET ${TARGET} PROPERTY C_STANDARD 11)
 
+# Print memory usage
 add_custom_command(
-    TARGET ${TARGET}
-    POST_BUILD
-    COMMAND ${CMAKE_OBJCOPY} -O ihex ${TARGET} ${PROJECT_NAME}.hex
+    TARGET ${TARGET} POST_BUILD
+    COMMAND ${CMAKE_OBJDUMP} -Pmem-usage ${TARGET}
     WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 )
 
+# Extract HEX
 add_custom_command(
-    TARGET ${TARGET}
-    POST_BUILD
-    COMMAND ${CMAKE_SIZE} --format=berkeley ${TARGET}
+    TARGET ${TARGET} POST_BUILD
+    COMMAND ${CMAKE_OBJCOPY} -O ihex -R.eeprom ${TARGET} ${PROJECT_NAME}.hex
     WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 )
 
-
-if (OPENOCD)
-  add_custom_target(flash-openocd
-    COMMAND ${OPENOCD} -d0 -f interface/stlink.cfg -f target/stm32f1x.cfg -c "program ${TARGET} verify reset exit"
-    DEPENDS ${TARGET}
+# Extract EEPROM HEX
+add_custom_command(
+    TARGET ${TARGET} POST_BUILD
+    COMMAND ${CMAKE_OBJCOPY} -O ihex -j .eeprom --set-section-flags=.eeprom="alloc,load" --change-section-lma .eeprom=0 ${TARGET} ${PROJECT_NAME}-EEPROM.hex
     WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-  )
+)
+
+find_program(AVRDUDE_EXECUTABLE avrdude)
+
+if (AVRDUDE_EXECUTABLE)
+    add_custom_target(
+        flash
+        COMMAND ${AVRDUDE_EXECUTABLE} -s -p ${AVRDUDE_DEVICE} ${AVRDUDE_FLAGS} -U "flash:w:${PROJECT_NAME}.hex:a"
+        DEPENDS ${TARGET}
+        WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+    )
+
+    # add_custom_target(
+    #     flash-fusebits
+    #     COMMAND ${AVRDUDE_EXECUTABLE} -s -p ${AVRDUDE_DEVICE} ${AVRDUDE_FLAGS} ${AVRDUDE_FUSEBIT_FLAGS}
+    #     DEPENDS ${TARGET}
+    #     WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+    # )
 endif()

@@ -3,11 +3,23 @@ Build
 ```
 mkdir build
 cd build
-cmake -G Ninja -DTOOLCHAIN_BIN_DIR="path/to/compiler/bin/" -DCMAKE_TOOLCHAIN_FILE="../extra/arm-none-eabi-toolchain.cmake" ..
+cmake -G Ninja -DTOOLCHAIN_BIN_DIR="path/to/compiler/bin/" -DCMAKE_TOOLCHAIN_FILE="../extra/avr8-gnu-toolchain.cmake" ..
 cmake --build .
 ```
 
-Toolchain file example: [extra/arm-none-eabi-toolchain.cmake](extra/arm-none-eabi-toolchain.cmake)
+Flash (avrdude required)
+
+```
+cmake --build . --target flash
+```
+
+Flash fuse bits
+
+```
+cmake --build . --target flash-fusebits
+```
+
+Toolchain file example: [extra/avr8-gnu-toolchain.cmake](extra/avr8-gnu-toolchain.cmake)
 
 VSCode example (`.vscode/settings.json`):
 
@@ -15,8 +27,10 @@ VSCode example (`.vscode/settings.json`):
 {
     "cmake.configureSettings": {
       "TOOLCHAIN_BIN_DIR": "path/to/compiler/bin/",
-      "CMAKE_TOOLCHAIN_FILE": "extra/arm-none-eabi-toolchain.cmake"
+      "CMAKE_TOOLCHAIN_FILE": "extra/avr8-gnu-toolchain.cmake"
     },
     "cmake.generator": "Ninja"
 }
 ```
+
+
