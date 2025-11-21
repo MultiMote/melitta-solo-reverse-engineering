@@ -8,9 +8,9 @@ Both of MCUs in my device are dead so I want try to make own controller.
 
 MCU is ATmega324PA (TQFP)
 
-![ef693_main_top](images/DSC03804.JPG)
+![ef693_main_top](images/ef693_main_top.jpg)
 
-![ef693_main_bot](images/DSC03805.JPG)
+![ef693_main_bot](images/ef693_main_bottom.jpg)
 
 Wiring:
 
@@ -18,19 +18,19 @@ Wiring:
 
 MCU Pins:
 
-![mcu_pins](images/mcu_pins.JPG)
+![mcu_pins_main](images/mcu_pins_main.jpg)
 
 ## EF693 Disp
 
 MCU is ATtiny48AU (TQFP)
 
-![ef693_disp_top](images/DSC03806.JPG)
+![ef693_disp_top](images/ef693_disp_top.jpg)
 
-![ef693_disp_bot](images/DSC03808.JPG)
+![ef693_disp_bot](images/ef693_disp_bot.jpg)
 
 MCU Pins:
 
-![mcu_pins](images/mcu_pins_disp.JPG)
+![mcu_pins](images/mcu_pins_disp.jpg)
 
 For this project, I have replaced the ATtiny48A with the ATmega328P, which is often used in Arduino boards. The pinout is mostly compatible, but one modification is necessary.
 
