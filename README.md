@@ -4,6 +4,12 @@ Both of MCUs in my device are dead so I want try to make own controller.
 
 [Schematics](schematics)
 
+⚠⚠⚠
+
+The board is not galvanically isolated from the mains! Disconnect the programmer from the computer when applying mains voltage to the board, otherwise something may blow up!
+
+⚠⚠⚠
+
 ## EF693 Main
 
 MCU is ATmega324PA (TQFP)
