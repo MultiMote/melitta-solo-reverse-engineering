@@ -41,3 +41,11 @@ MCU Pins:
 For this project, I have replaced the ATtiny48A with the ATmega328P, which is often used in Arduino boards. The pinout is mostly compatible, but one modification is necessary.
 
 ![ef693_disp_mod](images/ef693_disp_mod.jpg)
+
+## Brewing unit actuator
+
+Work of cam mechanism - power on (parking)
+
+[source](https://www.youtube.com/watch?v=c8QlqGzTjy4)
+
+https://github.com/user-attachments/assets/4184253f-a59c-4510-841d-e7e167fd1758
