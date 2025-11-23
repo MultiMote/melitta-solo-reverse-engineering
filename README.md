@@ -14,7 +14,15 @@ The board is not galvanically isolated from the mains! Disconnect the programmer
 
 MCU is ATmega324PA (TQFP)
 
+Top:
+
 ![ef693_main_top](images/ef693_main_top.jpg)
+
+Under RJ12 (6P6C) connector:
+
+![ef693_main_top_rj12](images/ef693_main_top_rj12.jpg)
+
+Bottom:
 
 ![ef693_main_bot](images/ef693_main_bottom.jpg)
 
@@ -30,7 +38,11 @@ MCU Pins:
 
 MCU is ATtiny48AU (TQFP)
 
+Top:
+
 ![ef693_disp_top](images/ef693_disp_top.jpg)
+
+Bottom:
 
 ![ef693_disp_bot](images/ef693_disp_bot.jpg)
 
