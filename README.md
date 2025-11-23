@@ -6,7 +6,13 @@ Both of MCUs in my device are dead so I want try to make own controller.
 
 ⚠⚠⚠
 
-The board is not galvanically isolated from the mains! Disconnect the programmer from the computer when applying mains voltage to the board, otherwise something may blow up!
+The board is not galvanically isolated from the mains (AC220_N connected to +5V)! Disconnect the programmer from the computer when applying mains voltage to the board, otherwise something may blow up!
+
+Or:
+
+  - Use laptop with battery power
+
+  - Power up board using transformer only (disconnect transformer from "Trafo" connector and connect transformer to 220v)
 
 ⚠⚠⚠
 
