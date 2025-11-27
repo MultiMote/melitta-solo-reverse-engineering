@@ -4,15 +4,15 @@ project(melitta-controller)
 
 set(TARGET ${PROJECT_NAME}.elf)
 
-set(AVR_DEVICE atmega324p)
-set(AVR_FREQ 8000000) # ?
+set(AVR_DEVICE atmega32a)
+set(AVR_FREQ 8000000)
 
-set(AVRDUDE_DEVICE m324p)
-# set(AVRDUDE_FUSEBIT_FLAGS -U lfuse:w:0xE2:m -U hfuse:w:0xDE:m -U efuse:w:0xFD:m)
+set(AVRDUDE_DEVICE m32)
+set(AVRDUDE_FUSEBIT_FLAGS -U lfuse:w:0xEE:m -U hfuse:w:0x99:m)
 
 if(NOT AVRDUDE_FLAGS)
     # usbasp programmer
-    set(AVRDUDE_FLAGS -c usbasp -P usb -V)
+    set(AVRDUDE_FLAGS -c usbasp -P usb -B 31.25 -V)
 endif()
 
 
@@ -66,10 +66,10 @@ if (AVRDUDE_EXECUTABLE)
         WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
     )
 
-    # add_custom_target(
-    #     flash-fusebits
-    #     COMMAND ${AVRDUDE_EXECUTABLE} -s -p ${AVRDUDE_DEVICE} ${AVRDUDE_FLAGS} ${AVRDUDE_FUSEBIT_FLAGS}
-    #     DEPENDS ${TARGET}
-    #     WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-    # )
+    add_custom_target(
+        flash-fusebits
+        COMMAND ${AVRDUDE_EXECUTABLE} -s -p ${AVRDUDE_DEVICE} ${AVRDUDE_FLAGS} ${AVRDUDE_FUSEBIT_FLAGS}
+        DEPENDS ${TARGET}
+        WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+    )
 endif()
