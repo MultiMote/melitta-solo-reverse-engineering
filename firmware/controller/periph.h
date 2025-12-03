@@ -6,25 +6,6 @@
 
 #include "utils.h"
 
-#define BE_MOT_PORT PORTC
-#define BE_MOT_DDR DDRC
-#define BE_MOT_FWD_PIN PORTC6
-#define BE_MOT_REV_PIN PORTC7
-
-#define BE_CAM_TOP_DDR PORTA
-#define BE_CAM_TOP_PINR PINA
-#define BE_CAM_TOP_PIN PORTA5
-
-#define BE_CAM_BOTTOM_DDR PORTB
-#define BE_CAM_BOTTOM_PINR PINB
-#define BE_CAM_BOTTOM_PIN PORTB0
-
-#define BE_PRESS_DDR PORTA
-#define BE_PRESS_PINR PINA
-#define BE_PRESS_PIN PORTA6
-
-
-
 enum be_motor_dir_t
 {
     BE_MOT_DIR_STOP = 0,
@@ -32,28 +13,35 @@ enum be_motor_dir_t
     BE_MOT_DIR_REV
 };
 
+static const io_def_t be_motor_fwd_io  = IO_BUILD(C, 6);
+static const io_def_t be_motor_rev_io  = IO_BUILD(C, 7);
+static const io_def_t be_cam_top_io    = IO_BUILD(A, 5);
+static const io_def_t be_cam_bottom_io = IO_BUILD(B, 0);
+static const io_def_t be_cam_press_io  = IO_BUILD(A, 6);
+
 static inline void hw_init(void)
 {
-    BE_MOT_DDR |= _BV(BE_MOT_FWD_PIN) | _BV(BE_MOT_REV_PIN);
+    configure_output(be_motor_fwd_io);
+    configure_output(be_motor_rev_io);
 
-    BE_CAM_TOP_DDR &= ~_BV(BE_CAM_TOP_PIN);
-    BE_CAM_BOTTOM_DDR &= ~_BV(BE_CAM_BOTTOM_PIN);
-    BE_PRESS_DDR &= ~_BV(BE_PRESS_PIN);
+    configure_input(be_cam_top_io);
+    configure_input(be_cam_bottom_io);
+    configure_input(be_cam_press_io);
 }
 
 static inline uint8_t is_cam_top_pressed(void)
 {
-    return !pin_check(BE_CAM_TOP_PINR, _BV(BE_CAM_TOP_PIN));
+    return !io_check(be_cam_top_io);
 }
 
 static inline uint8_t is_cam_bottom_pressed(void)
 {
-    return !pin_check(BE_CAM_BOTTOM_PINR, _BV(BE_CAM_BOTTOM_PIN));
+    return !io_check(be_cam_bottom_io);
 }
 
 static inline uint8_t is_press_pressed(void)
 {
-    return !pin_check(BE_PRESS_PINR, _BV(BE_PRESS_PIN));
+    return !io_check(be_cam_press_io);
 }
 
 static inline void be_motor(enum be_motor_dir_t dir)
@@ -61,20 +49,19 @@ static inline void be_motor(enum be_motor_dir_t dir)
     switch (dir)
     {
     case BE_MOT_DIR_FWD:
-        pin_on(BE_MOT_PORT, _BV(BE_MOT_FWD_PIN));
-        pin_off(BE_MOT_PORT, _BV(BE_MOT_REV_PIN));
+        io_on(be_motor_fwd_io);
+        io_off(be_motor_rev_io);
         break;
     case BE_MOT_DIR_REV:
-        pin_on(BE_MOT_PORT, _BV(BE_MOT_REV_PIN));
-        pin_off(BE_MOT_PORT, _BV(BE_MOT_FWD_PIN));
+        io_on(be_motor_rev_io);
+        io_off(be_motor_fwd_io);
         break;
     default:
-        pin_off(BE_MOT_PORT, _BV(BE_MOT_FWD_PIN) | _BV(BE_MOT_REV_PIN));
+        io_off(be_motor_fwd_io);
+        io_off(be_motor_rev_io);
         break;
     }
 }
-
-
 
 static inline void be_motor_parking(void)
 {
@@ -84,9 +71,9 @@ static inline void be_motor_parking(void)
     }
 
     be_motor(BE_MOT_DIR_STOP);
-    _delay_ms(100);
+    _delay_ms(200);
 
-    while(!is_cam_top_pressed()) // not pressed
+    while(!(is_cam_top_pressed() && !is_cam_bottom_pressed()))
     {
         be_motor(BE_MOT_DIR_FWD);
     }
