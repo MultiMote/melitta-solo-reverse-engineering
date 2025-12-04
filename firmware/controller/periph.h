@@ -93,13 +93,13 @@ static inline void be_motor_parking_after_brew(void)
 static inline void be_motor_parking_on_startup(void)
 {
     be_motor(BE_MOT_DIR_FWD);
-    _delay_ms(800);
+    _delay_ms(1200);
 
     be_motor(BE_MOT_DIR_STOP);
-    _delay_ms(200);
+    _delay_ms(100);
 
     be_motor(BE_MOT_DIR_REV);
-    _delay_ms(500);
+    _delay_ms(900);
 
     be_motor_parking();
 }
@@ -110,9 +110,24 @@ static inline void be_motor_press(void)
     be_motor(BE_MOT_DIR_FWD);
     _delay_ms(500);
 
-    while(!is_cam_bottom_pressed() && !is_press_pressed())
+    while(!is_cam_top_pressed())
     {
         be_motor(BE_MOT_DIR_FWD);
+    }
+
+    while(!(!is_cam_top_pressed() && is_cam_bottom_pressed()))
+    {
+        be_motor(BE_MOT_DIR_FWD);
+    }
+
+    be_motor(BE_MOT_DIR_STOP);
+}
+
+static inline void be_motor_unpress(void)
+{
+    while(!(is_cam_top_pressed() && is_cam_bottom_pressed()))
+    {
+        be_motor(BE_MOT_DIR_REV);
     }
 
     be_motor(BE_MOT_DIR_STOP);

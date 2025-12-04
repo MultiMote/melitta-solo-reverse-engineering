@@ -13,6 +13,9 @@ int main()
     be_motor_press();
 
     _delay_ms(2500);
+    be_motor_unpress();
+
+    _delay_ms(2500);
 
     be_motor_parking_after_brew();
 
