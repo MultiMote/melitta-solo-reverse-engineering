@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.1)
+cmake_minimum_required(VERSION 3.28)
 
 project(melitta-display)
 
@@ -18,8 +18,7 @@ endif()
 
 # Force release build
 set(CMAKE_BUILD_TYPE "Release" CACHE STRING "" FORCE)
-set(AVR_FLAGS "
-    -mmcu=${AVR_DEVICE} \
+set(AVR_FLAGS "-mmcu=${AVR_DEVICE} \
     -DF_CPU=${AVR_FREQ}UL \
     -Wall \
     -Werror \
