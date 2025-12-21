@@ -4,11 +4,11 @@ project(melitta-controller)
 
 set(TARGET ${PROJECT_NAME}.elf)
 
-set(AVR_DEVICE atmega32a)
+set(AVR_DEVICE atmega324pa)
 set(AVR_FREQ 8000000)
 
-set(AVRDUDE_DEVICE m32)
-set(AVRDUDE_FUSEBIT_FLAGS -U lfuse:w:0xEE:m -U hfuse:w:0x99:m)
+set(AVRDUDE_DEVICE m324pa)
+set(AVRDUDE_FUSEBIT_FLAGS -U lfuse:w:0xfe:m -U hfuse:w:0x11:m -U efuse:w:0xfd:m)
 
 if(NOT AVRDUDE_FLAGS)
     # usbasp programmer
