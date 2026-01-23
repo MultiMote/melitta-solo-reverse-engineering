@@ -2,6 +2,6 @@
 
 ![ef693_main](ef693_main.png)
 
-[Diptrace schematic](ef693_main.dsc)
+[Diptrace schematic](ef693_main.dsh)
 
 wip
